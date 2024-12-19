@@ -57,28 +57,29 @@ read.sample <- function(sample){
 filter.counts <- function(countTable){
   # Filter out low count genes
   meanlog2CPM <- rowMeans(log2(cpm(countTable + 1)))
-  countTable <- countTable[meanlog2CPM > 1, ]
-  return(countTable);
+  filterCounts <- countTable[meanlog2CPM > 1, ]
+  return(filterCounts);
 }
 
 #' Statistical Analysis
 #'
 #' @description
 #' Runs Statistical Analysis on the count data
-#' @param countTable,sampleTable Variable names for the count data and sample table
+#' @param filterCounts,sampleTable Variable names for the filter count data and sample table
 #' @return dge and desMatrix
 #' @examples
 #' stats <- statanalysis(countTable, sampleTable);
 #' @export
-statanalysis <- function(countTable, sampleTable){
+statanalysis <- function(filterCounts, sampleTable){
 
   disease <- factor(sampleTable$disease)
   sex <- factor(sampleTable$sex)
   individual <- factor(sampleTable$individual)
   # Perform statistical analysis to identify DEGs
-  dds <- DESeqDataSetFromMatrix(countData = countTable, colData = sampleTable, design = ~ disease)
+  dds <- DESeqDataSetFromMatrix(countData = filterCounts, colData = sampleTable, design = ~ disease)
   dds2 <- DESeq(dds)
   results <- results(dds2)
+  return(results)
   print(summary(results))
 }
 
@@ -86,19 +87,19 @@ statanalysis <- function(countTable, sampleTable){
 #'
 #' @description
 #' Makes design matrix and Fits linear models and performs stat testing
-#' @param countTable,sampleTable Count and sample data variable to dge normalize and make design matrix andf linear modelling
+#' @param filterCounts,sampleTable Filtered count and sample data variable to dge normalize and make design matrix andf linear modelling
 #' @return Data files and png files for enrichment analysis visual representation
 #' @examples
 #' linearmodel <- linmodel(countTable,sampleTable);
 #' @export
-linmodel <- function(countTable, sampleTable){
+linmodel <- function(filterCounts, sampleTable){
 
   disease <- factor(sampleTable$disease)
   sex <- factor(sampleTable$sex)
   individual <- factor(sampleTable$individual)
 
   # Create a DGEList object and normalize the data
-  dge <- DGEList(counts = countTable)
+  dge <- DGEList(counts = filterCounts)
   dge <- calcNormFactors(dge)
   print("Data normalized.")
 

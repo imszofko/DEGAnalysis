@@ -4,10 +4,10 @@
 \alias{statanalysis}
 \title{Statistical Analysis}
 \usage{
-statanalysis(countTable, sampleTable)
+statanalysis(filterCounts, sampleTable)
 }
 \arguments{
-\item{countTable, sampleTable}{Variable names for the count data and sample table}
+\item{filterCounts, sampleTable}{Variable names for the filter count data and sample table}
 }
 \value{
 dge and desMatrix

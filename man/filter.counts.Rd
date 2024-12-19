@@ -4,7 +4,7 @@
 \alias{filter.counts}
 \title{Performing filtering}
 \usage{
-filter.counts(countTable)
+\method{filter}{counts}(countTable)
 }
 \arguments{
 \item{countTable}{Variable storing the count data table}

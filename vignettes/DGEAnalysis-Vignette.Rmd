@@ -1,0 +1,108 @@
+---
+title: "DGEAnalysis-Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DGEAnalysis-Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(DEGAnalysis)
+```
+# DGEAnalysis
+
+The R Package DEGAnalysis was created for a bioinformatics software development course (BI503G). The main goal of the package is the use the functions from DEGAnalysis and have it run the programs intended by the functions. When running, it will read in two files: count data file and sample data file.
+
+After the files are read and the data is stored in variables, filtering and statistical analysis will start being performed. DEGs are sought out and stored in a variable and written to an excel file for later use. The DEGs are then used further in enrichment analysis where enrichGO and enrichKEGG will be used. 
+
+After that, dot plots, tree plots, and cnet plots are made and saved in .png format.
+
+## Preparing the space
+
+To be able to use the R package *DEGAnalysis*, it is recommended that you have the following packages already downloaded (the function will load them all):
+
+* devtools
+* edgeR
+* clusterProfiler
+* enrichplot
+* org.Hs.eg.db
+* openxlsx
+* DESeq2
+* AnnotationDbi
+* ggplot2
+
+```{r Installing, eval = F, echo = T}
+install.packages(c("openxlsx", "ggplot2")
+
+##Install Bioconductor packages
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("edgeR", "clusterProfiler", "enrichplot", "org.Hs.eg.db", "DESeq2", "AnnotationDbi"))
+
+#Load the required libraries
+install.packages("devtools")
+```
+
+
+## After Downloading Packages
+
+Once the packages have been downloaded, the R package can be downloaded as well:
+```{r Downloading, eval=F, echo=T}
+library(devtools)
+install_github("imszofko/statanalysis");
+```
+
+
+The name of the package is DEGAnalysis, you will load this up by using the function library(DEGAnalysis), after dowloaded from github.
+
+Once the package is loaded, there are only a few packages to use, this is the order they should be used (see code below).  **Both data file names should be written in quotes.**
+
+```{r Using, eval=F, echo=T}
+library(DEGAnalysis)
+
+ countdata <- read.counts("E-MTAB-2523.counts.txt")
+ sampledata <- read.sample("E-MTAB-2523_sample table.txt")
+ filterdata <- filter.counts(countdata)
+ statdata <- statanalysis(countdata, sampledata)
+ linmodelAnalysis<- linmodel(countdata, sampledata)
+```
+
+After the functions run, it will save data files and .png of the enrichment analysis visuals in the user's current working directory.
+
+## What each funtion does
+
+The first function read.counts() uses the path or file name of the count data .txt file in quotes. The file will be read in by the function and it will print a message saying that the counts were recorded. In the same function, the required libraries will also be loaded.
+
+```{r countdata, eval = F, echo = T}
+ countdata <- read.counts("E-MTAB-2523.counts.txt")
+```
+
+read.sample() does the same as read.counts() but with the sample data .txt file. The input is not the sample data file instead of the counts.
+```{r sampledata, eval = F, echo = T}
+sampledata <- read.sample("E-MTAB-2523_sample table.txt")
+```
+
+After counts and sample data is imported, filtering is next. filter.counts() will log2 filter the counts, and keep counts greater than 1 in the variable. 
+```{r filtercounts, eval = F, echo = T}
+filtercounts <- filter.counts(countdata)
+```
+
+When counts are filtered, they are then analysed with statanalysis(). They will be calculated and normalized in DESeq matrix. It will then print some of the DEGs and state how many rows and columns of data are in the DESeq object
+```{r statsanal, eval = F, echo = T}
+statsanal <- statanalysis(countdata, sampledata)
+```
+
+linmodel() is that last function to call upon. Here a designmatrix is created and used to identify DEGs in the data set. After the SYMBOL name are changed the ENTREZID names and enrichGO and enrichKEGG enrichment analysis is done and visuals are saved in .png format as well as the DEG and its values are saved in an .xlsx file.
+```{r linearmodel, eval = F, echo = T}
+linearmodel <- linmodel(countdata, sampledata)
+```
+

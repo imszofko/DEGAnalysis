@@ -4,10 +4,10 @@
 \alias{linmodel}
 \title{Linear Models}
 \usage{
-linmodel(countTable, sampleTable)
+linmodel(filterCounts, sampleTable)
 }
 \arguments{
-\item{countTable, sampleTable}{Count and sample data variable to dge normalize and make design matrix andf linear modelling}
+\item{filterCounts, sampleTable}{Filtered count and sample data variable to dge normalize and make design matrix andf linear modelling}
 }
 \value{
 Data files and png files for enrichment analysis visual representation
