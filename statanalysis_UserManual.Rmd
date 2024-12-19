@@ -1,0 +1,75 @@
+---
+title: "Statanalysis User Manual"
+author: "Sophia Arias"
+date: "2024-12-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Statanalysis
+
+The R Package statanalysis was created for a bioinformatics software development course (BI503G). The main goal of the package is the use the function statanalysis() and have it run. While running it will read in two files: count data file and sample data file.
+
+After the files are read and the data is stored in variables, filtering and statistical analysis will start being performed. DEGs are sought out and stored in a variable and written to an excel file for later use. The DEGs are then used further in enrichment analysis where enrichGO and enrichKEGG will be used. 
+
+After that, dot plots, tree plots, and cnet plots are made and saved in .png format.
+
+## Preparing the space
+
+To be able to use the R package *statanalysis*, it is recommended that you have the following packages already downloaded (the function will load them all):
+
+* devtools
+* edgeR
+* clusterProfiler
+* enrichplot
+* org.Hs.eg.db
+* openxlsx
+* DESeq2
+* AnnotationDbi
+* ggplot2
+
+```{r Installing, eval = F, echo = T}
+install.packages(c("openxlsx", "ggplot2")
+
+##Install Bioconductor packages
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("edgeR", "clusterProfiler", "enrichplot", "org.Hs.eg.db", "DESeq2", "AnnotationDbi"))
+
+#Load the required libraries
+install.packages("devtools")
+```
+
+
+## After Downloading Packages
+
+Once the packages have been downloaded, the R package can be downloaded as well:
+```{r Downloading, eval=F, echo=T}
+library(devtools)
+install_github("imszofko/statanalysis");
+```
+
+
+The name of the package is Assignment2StatAnalysis, you will load this up by using the function library().
+
+Once the package is loaded, there are only a few packages to use, this is the order they should be used (see code below).  **Both data file names should be written in quotes.**
+
+```{r Using, eval=F, echo=T}
+library(Assignment2StatAnalysis)
+
+countdata <- countData("E-MTAB-2523.counts.txt")
+
+sampledata <- sampleData("E-MTAB-2523_sample table.txt")
+
+filterdata <- filtering(countdata)
+
+stats <- statanalysis(countdata, sampledata)
+
+linearmodel <- linmodel(countdata, sampledata)
+
+```
+
+After the functions run, it will save data files and .png of the enrichment analysis visuals in the user's current working directory.
