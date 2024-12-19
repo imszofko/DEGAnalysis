@@ -1,6 +1,8 @@
 ---
 title: "DGEAnalysis-Vignette"
-output: rmarkdown::html_vignette
+output:
+  prettydoc::html_pretty:
+    toc: TRUE
 vignette: >
   %\VignetteIndexEntry{DGEAnalysis-Vignette}
   %\VignetteEngine{knitr::rmarkdown}
